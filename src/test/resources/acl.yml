@@ -1,0 +1,18 @@
+access-control-list:
+  - path: \/kie-server\/services\/rest\/server\/containers\/.*
+    methods:
+      - PUT
+    all:
+      - kie-server
+    any:
+      - admin-role
+
+  - path: \/kie-server\/services\/rest\/server\/.*
+    methods:
+      - POST
+      - GET
+      - PUT
+      - DELETE
+    all:
+      - kie-server
+
