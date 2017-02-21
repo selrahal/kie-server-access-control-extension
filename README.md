@@ -36,8 +36,10 @@ access-control-list:
 * any - a user must have any of these roles
 * all - a user must have all of these roles
 * NOTE: if both any and all are specified, then a user must satisfy both.
+
 ###### 4) Configure filter and point to access control list YAML file
-```  <filter>
+```
+  <filter>
     <filter-name>KieServerFilter</filter-name>
     <filter-class>org.rhc.svm.KieServerFilter</filter-class>
     <init-param>
