@@ -41,7 +41,7 @@ access-control-list:
 ```
   <filter>
     <filter-name>KieServerFilter</filter-name>
-    <filter-class>org.rhc.svm.KieServerFilter</filter-class>
+    <filter-class>org.rhc.jboss.security.KieServerFilter</filter-class>
     <init-param>
       <param-name>config-location</param-name>
       <param-value>/WEB-INF/acl.yml</param-value>

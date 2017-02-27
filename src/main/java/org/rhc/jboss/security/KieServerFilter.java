@@ -1,5 +1,7 @@
-package org.rhc.svm;
+package org.rhc.jboss.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -10,10 +12,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by nbalkiss on 2/15/17.
+ * Created by Nick Balkissoon on 2/15/17.
  */
 public class KieServerFilter implements Filter{
+
+    private static final Logger LOG = LoggerFactory.getLogger(KieServerFilter.class);
+
     private List<Map<String,Object>> accessControlList;
+
     public void init(FilterConfig filterConfig) throws ServletException {
 
         String resourcePath = filterConfig.getInitParameter("config-location");
@@ -28,29 +34,29 @@ public class KieServerFilter implements Filter{
                 throw new ServletException("Access control list not defined, must start with 'access-control-list'");
             }
         }
-        catch(Exception ioe){
-            throw new ServletException("Error initializing filter, check that access control list file exists and has proper YAML format",ioe);
+        catch(Exception e){
+            throw new ServletException("Error initializing filter, check that access control list file exists and has proper YAML format",e);
         }
     }
 
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
         HttpServletRequest req = (HttpServletRequest) servletRequest;
-        System.out.println("Request url: "+req.getRequestURI());
+        LOG.debug("Request url: "+req.getRequestURI());
 
         if(!userHasPermission(req)){
             HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
             httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-            System.out.println("access denied");
+            LOG.debug("access denied");
         }
         else{
-            System.out.println("access granted");
+            LOG.debug("access granted");
         }
         filterChain.doFilter(servletRequest,servletResponse);
     }
 
     /**
-     * Process access control list to determine if user has access to this resource
+     * Process access control list to determine if user has access to this resource (path and method)
      * @param request
      * @return
      */
@@ -73,7 +79,7 @@ public class KieServerFilter implements Filter{
     }
 
     /**
-     * Check if user is in all of these rules
+     * Return true if user is in ALL of these roles
      * @param request
      * @param roles
      * @return
@@ -88,7 +94,7 @@ public class KieServerFilter implements Filter{
     }
 
     /**
-     * Check if user is in any of these roles
+     * Return true if user is in ANY of these roles
      * @param request
      * @param roles
      * @return

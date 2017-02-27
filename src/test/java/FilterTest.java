@@ -5,7 +5,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsDeepStubs;
-import org.rhc.svm.KieServerFilter;
+import org.rhc.jboss.security.KieServerFilter;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.Enumeration;
 
 /**
- * Created by nbalkiss on 2/16/17.
+ * Created by Nick Balkissoon on 2/16/17.
  */
 public class FilterTest {
 
