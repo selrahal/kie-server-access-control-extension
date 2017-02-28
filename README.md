@@ -1,5 +1,5 @@
-# KieServer Access Control Filter
-This custom servlet filter gives you more granular security controls over the KieServer's REST API.
+# KieServer Access Control Extension
+This KieServer extension gives you more granular security controls over the REST API. It also allows you to include access control list files in your KJARs for hot deployment. 
 ### How to use:
 ###### 1) Build the project
 ```sh
@@ -15,14 +15,14 @@ $ cp KieServerFilter/target/lib/* $EAP_HOME/standalone/deployments/kie-server.wa
 ###### 3) Create your access control list.  This is a YAML file that specifies access to resources.  Here is an example:
 ```
 access-control-list:
-  - path: \/kie-server\/services\/rest\/server\/containers\/.*
+  - path: \/server\/containers.*
     methods:
       - PUT
     all:
       - kie-server
     any:
       - admin-role
-  - path: \/kie-server\/services\/rest\/server\/.*
+  - path: \/server.*
     methods:
       - POST
       - GET
@@ -37,20 +37,8 @@ access-control-list:
 * all - a user must have all of these roles
 * NOTE: if both any and all are specified, then a user must satisfy both.
 
-###### 4) Configure filter and point to access control list YAML file
-```
-  <filter>
-    <filter-name>KieServerFilter</filter-name>
-    <filter-class>org.rhc.jboss.security.KieServerFilter</filter-class>
-    <init-param>
-      <param-name>config-location</param-name>
-      <param-value>/WEB-INF/acl.yml</param-value>
-    </init-param>
-  </filter>
+###### 4) Copy `acl.yml` to your JBoss configuration folder (`$JBOSS_HOME/standalone/configuration`)
+###### 5) Restart KieServer
 
-  <filter-mapping>
-      <filter-name>KieServerFilter</filter-name>
-      <url-pattern>/services/rest/*</url-pattern>
-  </filter-mapping>
-  ```
-5) Restart KieServer
+###### 6) KJAR specific access control list
+If you include an `acl.yml` file into your KJAR under the `META-INF` folder it will be picked up and used instead of the system access control file for any operations on that KieContainer. The syntax is the same as the system access control list.
